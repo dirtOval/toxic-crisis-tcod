@@ -1,0 +1,6 @@
+Lib
+pyvenv.cfg
+Scripts
+__pycache__
+*.sav
+venv
