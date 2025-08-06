@@ -13,6 +13,7 @@ from tcod.map import compute_fov
 # from tcod import FOV_SYMMETRIC_SHADOWCAST
 
 import exceptions
+
 # from input_handlers import MainGameEventHandler
 from message_log import MessageLog
 import render_functions
@@ -25,18 +26,25 @@ if TYPE_CHECKING:
     from game_map import GameMap, GameWorld
     # from input_handlers import EventHandler
 
+
 class Engine:
     game_map: GameMap
     game_world: GameWorld
 
     def __init__(self, player: Actor):
         self.message_log = MessageLog()
-        self.mouse_location = (0, 0)
+        self.mouse_location: tuple[int, int] = (0, 0)
         self.player = player
-        #should write a script to import this on setup and turn it into a useful shape
-        self.entity_dict = dict([(var, obj) for var, obj in entity_factories.__dict__.items() if isinstance(obj, Entity)])
+        # should write a script to import this on setup and turn it into a useful shape
+        self.entity_dict = dict(
+            [
+                (var, obj)
+                for var, obj in entity_factories.__dict__.items()
+                if isinstance(obj, Entity)
+            ]
+        )
         # self.debug_mode = False
-        #debug switches
+        # debug switches
         self.do_fov = True
         self.player_is_ghost = False
         self.player_teleport = False
@@ -47,25 +55,25 @@ class Engine:
             # print(f'The {entity.name} does nothing on its turn :P')
             if entity.ai:
                 try:
-                  entity.ai.perform()
+                    entity.ai.perform()
                 except exceptions.Impossible:
-                    pass #plays dont need to know every time AI fails attempt
+                    pass  # plays dont need to know every time AI fails attempt
 
     def update_fov(self) -> None:
         fov_radius = 8 if self.do_fov else 0
         self.game_map.visible[:] = compute_fov(
-            self.game_map.tiles['transparent'],
+            self.game_map.tiles["transparent"],
             (self.player.x, self.player.y),
-            radius=fov_radius, #should make this a variable later. flashlight/torch etc
-            #fuck with FOV algorithm
+            radius=fov_radius,  # should make this a variable later. flashlight/torch etc
+            # fuck with FOV algorithm
         )
         self.game_map.explored |= self.game_map.visible
-            
+
     def render(self, console: Console) -> None:
         self.game_map.render(console)
 
         self.message_log.render(console=console, x=21, y=45, width=40, height=5)
-        
+
         render_functions.render_bar(
             console=console,
             current_value=self.player.fighter.hp,
@@ -82,8 +90,9 @@ class Engine:
         render_functions.render_names_at_mouse_location(
             console=console, x=21, y=44, engine=self
         )
-    
+
     def save_as(self, filename: str) -> None:
         save_data = lzma.compress(pickle.dumps(self))
-        with open(filename, 'wb') as f:
+        with open(filename, "wb") as f:
             f.write(save_data)
+

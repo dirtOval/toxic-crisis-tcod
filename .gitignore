@@ -4,3 +4,5 @@ Scripts
 __pycache__
 *.sav
 venv
+token.txt
+xclip
