@@ -677,9 +677,10 @@ class SelectIndexHandler(AskUserEventHandler):
     def ev_mousebuttondown(
         self, event: tcod.event.MouseButtonDown
     ) -> Optional[ActionOrHandler]:
-        if self.engine.game_map.in_bounds(*event.tile):
+        int_x, int_y = int(event.tile.x), int(event.tile.y)
+        if self.engine.game_map.in_bounds(int_x, int_y):
             if event.button == 1:
-                return self.on_index_selected(*event.tile)
+                return self.on_index_selected(int_x, int_y)
             return super().ev_mousebuttondown(event)
 
     def on_index_selected(self, x: int, y: int) -> Optional[ActionOrHandler]:
