@@ -92,7 +92,19 @@ class Engine:
         )
 
     def save_as(self, filename: str) -> None:
-        save_data = lzma.compress(pickle.dumps(self))
-        with open(filename, "wb") as f:
-            f.write(save_data)
-
+        # data = {
+        #     "game_map": self.game_map,
+        #     "game_world": self.game_world,
+        #     "message_log": self.message_log,
+        #     "player": self.player,
+        #     "entity_dict": self.entity_dict,
+        #     "do_fov": self.do_fov,
+        #     "player_is_ghost": self.player_is_ghost,
+        #     "player_teleport": self.player_teleport,
+        #     "auto_wait": self.auto_wait,
+        # }
+        # save_data = lzma.compress(pickle.dumps(self))
+        # save_data = lzma.compress(pickle.dumps(data))
+        # with open(filename, "wb") as f:
+        #     f.write(save_data)
+        print("need to add saving back in with dill maybe? lmao oops SDL3")
