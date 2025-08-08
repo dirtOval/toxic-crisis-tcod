@@ -54,6 +54,8 @@ class Engine:
         for entity in set(self.game_map.actors) - {self.player}:
             # print(f'The {entity.name} does nothing on its turn :P')
             if entity.ai:
+                for condition in entity.fighter.conditions:
+                    condition.proc()  # if poisoned, take damage for instance
                 try:
                     entity.ai.perform()
                 except exceptions.Impossible:

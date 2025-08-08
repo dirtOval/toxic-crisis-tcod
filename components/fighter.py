@@ -21,6 +21,7 @@ class Fighter(BaseComponent):
         self._hp = hp
         self.base_defense = base_defense
         self.base_power = base_power
+        self.conditions = []
 
     @property
     def hp(self) -> int:

@@ -139,6 +139,10 @@ class EventHandler(BaseEventHandler):
         if isinstance(action_or_state, BaseEventHandler):
             return action_or_state
         if self.handle_action(action_or_state):
+            for condition in (
+                self.engine.player.fighter.conditions
+            ):  # this should only affect players?
+                condition.proc()
             if not self.engine.player.is_alive:
                 return GameOverEventHandler(self.engine)
             elif self.engine.player.level.requires_level_up:
@@ -818,7 +822,7 @@ class MainGameEventHandler(EventHandler):
 
         # debug tools
         elif key == tcod.event.KeySym.KP_MULTIPLY:
-            if self.engine.player_teleport == True:
+            if self.engine.player_teleport:
                 return PlayerTeleportHandler(self.engine)
 
         elif key == tcod.event.KeySym.KP_PLUS:
