@@ -10,18 +10,26 @@ from render_order import RenderOrder
 
 if TYPE_CHECKING:
     from entity import Actor
+    from condition import Condition
 
 
 class Fighter(BaseComponent):
     # entity: Actor
     parent: Actor
 
-    def __init__(self, hp: int, base_defense: int, base_power: int):
+    def __init__(
+        self,
+        hp: int,
+        base_defense: int,
+        base_power: int,
+        attack_effect: Condition = None,
+    ):
         self.max_hp = hp
         self._hp = hp
         self.base_defense = base_defense
         self.base_power = base_power
         self.conditions = []
+        self.attack_effect = attack_effect
 
     @property
     def hp(self) -> int:
