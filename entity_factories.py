@@ -8,6 +8,7 @@ from components.level import Level
 from components.spawner import TimerSpawner, EcoSpawner
 from entity import Actor, Item, MobSpawner, Resource
 from color import guard_pink, virus_teal, snake_green
+from condition import PoisonCondition
 
 # player = Entity(char='@', color=(255, 255, 255), name='Player', blocks_movement=True)
 player = Actor(
@@ -22,6 +23,13 @@ player = Actor(
     faction="player",
 )
 
+# CONDITIONS
+mamba_madness = PoisonCondition(
+    name="Mamba Madness",
+    duration=3,
+    damage=3,
+)
+
 # toxic crisis mobs
 snake = Actor(
     char="s",
@@ -29,12 +37,13 @@ snake = Actor(
     name="Poisonous Snake",
     ai_cls=ai.Combatant,
     equipment=Equipment(),
-    fighter=Fighter(hp=6, base_defense=0, base_power=2),
+    fighter=Fighter(hp=6, base_defense=0, base_power=5, attack_effect=mamba_madness),
     inventory=Inventory(capacity=1),
     level=Level(xp_given=1),
     faction="snake",
 )
 
+# OLD SHIT
 # allied mobs
 guard = Actor(
     char="g",
@@ -236,4 +245,3 @@ chain_mail = Item(
     name="Chain Mail",
     equippable=equippable.ChainMail(),
 )
-

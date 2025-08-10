@@ -5,14 +5,14 @@ if TYPE_CHECKING:
 
 
 class Condition:
-    parent: Fighter | None
+    parent: None
 
     def __init__(
         self,
         name: str = "<Unnamed Condition>",
         duration: int | None = None,
     ):
-        self.name = (name,)
+        self.name = name
         self.duration = duration
         self.parent = None
 
@@ -20,7 +20,7 @@ class Condition:
         if self.duration:
             self.duration -= 1
             if self.duration < 1:
-                self.parent.conditions.remove(self)
+                self.parent.fighter.conditions.remove(self)
 
 
 class PoisonCondition(Condition):
