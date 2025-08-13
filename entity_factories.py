@@ -34,7 +34,7 @@ mamba_madness = PoisonCondition(
 snake = Actor(
     char="s",
     color=snake_green,
-    name="Poisonous Snake",
+    name="Green Mamba",
     ai_cls=ai.Combatant,
     equipment=Equipment(),
     fighter=Fighter(hp=6, base_defense=0, base_power=5, attack_effect=mamba_madness),
