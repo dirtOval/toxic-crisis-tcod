@@ -26,6 +26,20 @@ class Equippable(BaseComponent):
         # self.defense_bonus = defense_bonus
 
 
+class Armor(Equippable):
+    parent: Item
+
+    def __init__(
+        self,
+        equipment_type: EquipmentType.ARMOR,
+        armor_value: int = 0,
+        dodge_value: int = 0,
+    ):
+        super().__init__(equipemnt_type=equipment_type)
+        self.armor_value = armor_value
+        self.dodge_value = dodge_value
+
+
 class Weapon(Equippable):
     parent: Item
 

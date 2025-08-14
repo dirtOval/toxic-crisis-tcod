@@ -7,8 +7,9 @@ STUFF TO DO
 -BONUS make blood pool on ground
 
 ORDER OF OPERATIONS
--update equippable component to accomodate new weapon stats
--make a rifle for PC with accuracy, range, AP, damage die (AR-150)
+DONE-update equippable component to accomodate new weapon stats
+DONE-make a rifle for PC with accuracy, range, AP, damage die (AR-150)
+-subclass equippable into Armor
 -add Ballistic Vest for PC with like AV 1 DV 0 or something`
 -add AV, DV to green mamba
 -update equipment.py to make PC AV and weapon stats affect gameplay
