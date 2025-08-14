@@ -1,7 +1,7 @@
 import components.ai as ai
 
 # from components import consumable, equippable
-from components.equippable import Weapon, RangedWeapon
+from components.equippable import Weapon, RangedWeapon, Armor
 from components.harvestable import Harvestable
 from components.equipment import Equipment
 from components.fighter import Fighter
@@ -45,7 +45,7 @@ snake = Actor(
     faction="snake",
 )
 
-# weapons
+# PC weapons
 ar_150 = Item(
     char=")",
     color=(15, 15, 15),
@@ -58,6 +58,21 @@ ar_150 = Item(
         ammo_type=None,  # add 5.56mm later
     ),
 )
+# PC armor
+ballistic_vest = Item(
+    char="]",
+    color=(15, 50, 15),
+    name="Ballistic Vest",
+    equippable=Armor(
+        armor_value=2,
+        dodge_value=0,
+    ),
+)
+
+# mob weapons
+
+# mob armor
+
 ###########################################################
 # OLD SHIT
 # allied mobs

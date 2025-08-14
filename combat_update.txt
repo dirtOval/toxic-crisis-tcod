@@ -20,3 +20,4 @@ DONE-make a rifle for PC with accuracy, range, AP, damage die (AR-150)
 THINK ABOUT
 how does leveling up affect these stats?
 make enemies use weapons! e.g. poison fangs for green mamba
+what is base DV?
