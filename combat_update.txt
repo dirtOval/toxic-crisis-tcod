@@ -10,9 +10,11 @@ ORDER OF OPERATIONS
 DONE-update equippable component to accomodate new weapon stats
 DONE-make a rifle for PC with accuracy, range, AP, damage die (AR-150)
 DONE-subclass equippable into Armor
--add Ballistic Vest for PC with like AV 1 DV 0 or something`
+DONE-add Ballistic Vest for PC with like AV 1 DV 0 or something`
+-make NPCs auto-equip weapons
 -add AV, DV to green mamba
--update equipment.py to make PC AV and weapon stats affect gameplay
+DONE-update equipment.py to make PC AV and weapon stats affect gameplay
+-move attack_effect to weapons
 -update melee and ranged attack actions to do attack roll -> damage calculation
 -add bleed status effect (in conditions)
 -add a new category of entity you can't pick up, blood.
