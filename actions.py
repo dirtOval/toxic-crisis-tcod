@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from typing import Optional, Tuple, TYPE_CHECKING
+from random import randint
+from copy import deepcopy
 
 import color
 import exceptions
@@ -10,6 +12,10 @@ from entity import MobSpawner
 if TYPE_CHECKING:
     from engine import Engine
     from entity import Entity, Actor, Item, Resource
+
+# CONSTANTS FOR QUICK ACCESS:
+BASE_DODGE = 4  # will need to tweak
+ATTACK_DIE = 8
 
 
 class Action:
@@ -165,38 +171,53 @@ class MeleeAction(ActionWithDirection):
             # return
             raise exceptions.Impossible("Nothing to attack.")
 
-        damage = self.entity.fighter.power - target.fighter.defense
-
-        attack_desc = f"{self.entity.name.capitalize()} attacks {target.name}"
-
+        # damage = self.entity.fighter.power - target.fighter.defense
+        weapon = self.entity.equipment.weapon
+        critical = False
+        hit_roll = randint(1, ATTACK_DIE)
+        if hit_roll == ATTACK_DIE:
+            critical = True
+        roll_with_modifiers = hit_roll + self.entity.fighter.accuracy
+        attack_desc = (
+            f"{self.entity.name.capitalize()} attacks {target.name} with {weapon.name}"
+        )
         if self.entity is self.engine.player:
             attack_color = color.player_atk
         else:
             attack_color = color.enemy_atk
-
-        if damage > 0:
-            # print(f'{attack_desc} for {damage} hit points.')
+        if roll_with_modifiers < (BASE_DODGE + target.fighter.dodge) and not critical:
             self.engine.message_log.add_message(
-                f"{attack_desc} for {damage} hit points.", attack_color
+                f"{attack_desc} but misses!", attack_color
             )
-            target.fighter.hp -= damage
-            # import pdb: pdb.set_trace()
-            if (
-                self.entity.fighter.attack_effect
-                and self.entity.fighter.attack_effect.name
-                not in [x.name for x in target.fighter.conditions]
-            ):
-                condition = self.entity.fighter.attack_effect
-                target.fighter.conditions.append(condition)
-                condition.parent = target
-                self.engine.message_log.add_message(
-                    f"{self.entity.name.capitalize()} afflicts {target.name} with {self.entity.fighter.attack_effect.name}"
-                )
         else:
-            # print(f'{attack_desc} but does no damage')
-            self.engine.message_log.add_message(
-                f"{attack_desc} but does no damage", attack_color
+            ap = (
+                weapon.equippable.armor_penetration * 2
+                if critical
+                else weapon.equippable.armor_penetration
             )
+            penetration_factor = ap - target.fighter.armor
+            damage = randint(1, weapon.equippable.damage)
+
+            if penetration_factor >= 0 and weapon.equippable.effect is not None:
+                effect = deepcopy(weapon.equippable.effect)
+                target.fighter.conditions.append(effect)
+                effect.parent = target
+
+            if penetration_factor > 0:
+                damage * penetration_factor
+            elif penetration_factor < 0:
+                damage // (abs(penetration_factor) + 1)
+            if damage > 0:
+                # print(f'{attack_desc} for {damage} hit points.')
+                self.engine.message_log.add_message(
+                    f"{attack_desc} for {damage} hit points", attack_color
+                )
+                target.fighter.hp -= damage
+            else:
+                # print(f'{attack_desc} but does no damage')
+                self.engine.message_log.add_message(
+                    f"{attack_desc} but fails to penetrate their armor", attack_color
+                )
 
         # placeholder lmao
         # print(f'You kick the {target.name}, dealing 1,000,000 damage')
@@ -314,4 +335,3 @@ class BumpAction(ActionWithDirection):
             return MeleeAction(self.entity, self.dx, self.dy).perform()
         else:
             return MovementAction(self.entity, self.dx, self.dy).perform()
-

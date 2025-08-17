@@ -50,16 +50,20 @@ def test_level() -> Engine:
 
     engine.message_log.add_message("TEST LEVEL", color.welcome_text)
 
-    dagger = copy.deepcopy(entity_factories.dagger)
-    leather_armor = copy.deepcopy(entity_factories.leather_armor)
+    rifle = copy.deepcopy(entity_factories.ar_150)
+    knife = copy.deepcopy(entity_factories.combat_knife)
+    armor = copy.deepcopy(entity_factories.ballistic_vest)
 
-    dagger.parent = player.inventory
-    leather_armor.parent = player.inventory
+    rifle.parent = player.inventory
+    knife.parent = player.inventory
+    armor.parent = player.inventory
 
-    player.inventory.items.append(dagger)
-    player.equipment.toggle_equip(dagger, add_message=False)
-    player.inventory.items.append(leather_armor)
-    player.equipment.toggle_equip(leather_armor, add_message=False)
+    player.inventory.items.append(rifle)
+    player.equipment.toggle_equip(rifle, add_message=False)
+    player.inventory.items.append(knife)
+    player.equipment.toggle_equip(knife, add_message=False)
+    player.inventory.items.append(armor)
+    player.equipment.toggle_equip(armor, add_message=False)
 
     return engine
 
@@ -94,16 +98,16 @@ def new_game() -> Engine:
 
     engine.message_log.add_message("NEW GAME", color.welcome_text)
 
-    dagger = copy.deepcopy(entity_factories.dagger)
-    leather_armor = copy.deepcopy(entity_factories.leather_armor)
+    rifle = copy.deepcopy(entity_factories.rifle)
+    ballistic_vest = copy.deepcopy(entity_factories.ballistic_vest)
 
-    dagger.parent = player.inventory
-    leather_armor.parent = player.inventory
+    rifle.parent = player.inventory
+    ballistic_vest.parent = player.inventory
 
-    player.inventory.items.append(dagger)
-    player.equipment.toggle_equip(dagger, add_message=False)
-    player.inventory.items.append(leather_armor)
-    player.equipment.toggle_equip(leather_armor, add_message=False)
+    player.inventory.items.append(rifle)
+    player.equipment.toggle_equip(rifle, add_message=False)
+    player.inventory.items.append(ballistic_vest)
+    player.equipment.toggle_equip(ballistic_vest, add_message=False)
 
     return engine
 

@@ -7,6 +7,7 @@ from equipment_types import EquipmentType
 
 if TYPE_CHECKING:
     from entity import Item
+    from condition import Condition
 
 # from entity_factories import Arrow
 
@@ -57,6 +58,7 @@ class Weapon(Equippable):
         accuracy: int = 0,
         armor_penetration: int = 0,
         damage: int = 1,
+        effect: Condition = None,
     ):
         super().__init__(
             equipment_type=equipment_type,
@@ -68,6 +70,7 @@ class Weapon(Equippable):
         self.accuracy = accuracy
         self.armor_penetration = armor_penetration
         self.damage = damage
+        self.effect = effect
 
 
 class RangedWeapon(Weapon):

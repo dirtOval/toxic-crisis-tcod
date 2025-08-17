@@ -57,15 +57,15 @@ class Fighter(BaseComponent):
 
     @property
     def armor_bonus(self) -> int:
-        if self.parent.equipment:
-            return self.parent.equipment.armor_bonus
+        if self.parent.equipment.armor:
+            return self.parent.equipment.armor.equippable.armor_value
         else:
             return 0
 
     @property
     def dodge_bonus(self) -> int:
-        if self.parent.equipment:
-            return self.parent.equipment.dodge_bonus
+        if self.parent.equipment.armor:
+            return self.parent.equipment.armor.equippable.dodge_value
         else:
             return 0
 

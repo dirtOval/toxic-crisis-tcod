@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from random import randint
 
 if TYPE_CHECKING:
     from components.fighter import Fighter
@@ -31,7 +32,7 @@ class PoisonCondition(Condition):
         damage: int = 1,
     ):
         super().__init__(name=name, duration=duration)
-        self.damage = damage
+        self.damage = randint(1, damage)
 
     def proc(self):
         self.parent.fighter.hp -= self.damage

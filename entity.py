@@ -154,11 +154,11 @@ class Actor(Entity):
     def is_alive(self) -> bool:
         return bool(self.ai)
 
-    def spawn(self: T, gamemap: GameMap, x: int, y: int) -> T:
-        super.spawn(gamemap, x, y)
-        # if they start with equipment, equip it!
-        for item in self.inventory.items:
-            item.equipment.toggle_equip(item, add_message=False)
+    # def spawn(self: T, gamemap: GameMap, x: int, y: int) -> T:
+    # super.spawn(gamemap, x, y)
+    # if they start with equipment, equip it! honestly this is a good idea but should use [ ] expression for .equippable
+    # for item in self.inventory.items:
+    #    item.equipment.toggle_equip(item, add_message=False)
 
 
 class MobSpawner(Actor):
@@ -307,4 +307,3 @@ class Resource(Entity):
 
     def get_name(self) -> str:
         return f"{self.name} [{self.harvestable.capacity}]"
-

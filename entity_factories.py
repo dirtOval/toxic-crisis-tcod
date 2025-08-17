@@ -19,7 +19,12 @@ player = Actor(
     name="Player",
     ai_cls=ai.Combatant,
     equipment=Equipment(),
-    fighter=Fighter(hp=30, base_defense=1, base_power=2),
+    fighter=Fighter(
+        hp=30,
+        base_armor=0,
+        base_dodge=0,
+        base_accuracy=0,
+    ),
     inventory=Inventory(capacity=26),
     level=Level(level_up_base=200),
     faction="player",
@@ -36,7 +41,7 @@ mamba_madness = PoisonCondition(
 # PC weapons
 ar_150 = Item(
     char=")",
-    color=(15, 15, 15),
+    color=(80, 80, 80),
     name="AR-150",
     equippable=RangedWeapon(
         accuracy=2,
@@ -46,10 +51,21 @@ ar_150 = Item(
         ammo_type=None,  # add 5.56mm later
     ),
 )
+
+combat_knife = Item(
+    char="!",
+    color=(255, 255, 255),
+    name="Combat Knife",
+    equippable=Weapon(
+        accuracy=3,
+        armor_penetration=2,
+        damage=4,
+    ),
+)
 # PC armor
 ballistic_vest = Item(
     char="]",
-    color=(15, 50, 15),
+    color=(80, 150, 80),
     name="Ballistic Vest",
     equippable=Armor(
         armor_value=2,
@@ -62,7 +78,13 @@ poison_fangs = Item(
     char="",
     color=(100, 100, 100),
     name="Poison Fangs",
-    equippable=Weapon(natural=True, accuracy=1, armor_penetration=2, damage=2),
+    equippable=Weapon(
+        natural=True,
+        accuracy=1,
+        armor_penetration=2,
+        damage=2,
+        effect=mamba_madness,
+    ),
 )
 # mob armor --idk if i need this lmao
 scales = Item(
@@ -82,7 +104,7 @@ snake = Actor(
     color=snake_green,
     name="Green Mamba",
     ai_cls=ai.Combatant,
-    equipment=Equipment(items=[poison_fangs]),
+    equipment=Equipment(weapon=poison_fangs),
     fighter=Fighter(
         hp=6,
         base_armor=1,

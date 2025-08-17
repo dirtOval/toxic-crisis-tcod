@@ -11,15 +11,16 @@ DONE-update equippable component to accomodate new weapon stats
 DONE-make a rifle for PC with accuracy, range, AP, damage die (AR-150)
 DONE-subclass equippable into Armor
 DONE-add Ballistic Vest for PC with like AV 1 DV 0 or something`
--make NPCs auto-equip weapons
--add AV, DV to green mamba
+DONE-make NPCs auto-equip weapons
+DONE-add AV, DV to green mamba
 DONE-update equipment.py to make PC AV and weapon stats affect gameplay
--move attack_effect to weapons
--update melee and ranged attack actions to do attack roll -> damage calculation
--add bleed status effect (in conditions)
+DONE-move attack_effect to weapons
+DONE-update melee and ranged attack actions to do attack roll -> damage calculation
+-add bleed status effect (in conditions)--subclass poisioncondition, drops a blood item for every round as long as it's bleeding
 -add a new category of entity you can't pick up, blood.
 
 THINK ABOUT
 how does leveling up affect these stats?
 make enemies use weapons! e.g. poison fangs for green mamba
 what is base DV?
+what about critical hit?
