@@ -121,4 +121,3 @@ class RangedWeapon(Weapon):
 #    def __init__(self) -> None:
 #        # add ammo later!
 #        super().__init__(defense_bonus=0, power_bonus=10, range=10)
-

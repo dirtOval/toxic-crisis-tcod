@@ -10,7 +10,7 @@ from render_order import RenderOrder
 
 if TYPE_CHECKING:
     from entity import Actor
-    from condition import Condition
+    # from condition import Condition
 
 
 class Fighter(BaseComponent):
@@ -20,16 +20,18 @@ class Fighter(BaseComponent):
     def __init__(
         self,
         hp: int,
-        base_defense: int,
-        base_power: int,
-        attack_effect: Condition = None,
+        base_armor: int = 0,
+        base_dodge: int = 0,
+        base_accuracy: int = 0,
+        # attack_effect: Condition = None,
     ):
         self.max_hp = hp
         self._hp = hp
-        self.base_defense = base_defense
-        self.base_power = base_power
+        self.base_armor = base_armor
+        self.base_dodge = base_dodge
+        self.base_accuracy = base_accuracy
         self.conditions = []
-        self.attack_effect = attack_effect
+        # self.attack_effect = attack_effect
 
     @property
     def hp(self) -> int:
@@ -42,24 +44,35 @@ class Fighter(BaseComponent):
             self.die()
 
     @property
-    def defense(self) -> int:
-        return self.base_defense + self.defense_bonus
+    def armor(self) -> int:
+        return self.base_armor + self.armor_bonus
 
     @property
-    def power(self) -> int:
-        return self.base_power + self.power_bonus
+    def dodge(self) -> int:
+        return self.base_dodge + self.dodge_bonus
 
     @property
-    def defense_bonus(self) -> int:
+    def accuracy(self) -> int:
+        return self.base_accuracy + self.accuracy_bonus
+
+    @property
+    def armor_bonus(self) -> int:
         if self.parent.equipment:
-            return self.parent.equipment.defense_bonus
+            return self.parent.equipment.armor_bonus
         else:
             return 0
 
     @property
-    def power_bonus(self) -> int:
+    def dodge_bonus(self) -> int:
         if self.parent.equipment:
-            return self.parent.equipment.power_bonus
+            return self.parent.equipment.dodge_bonus
+        else:
+            return 0
+
+    @property
+    def accuracy_bonus(self) -> int:
+        if self.parent.equipment:
+            return self.parent.equipment.accuracy_bonus
         else:
             return 0
 
@@ -89,7 +102,11 @@ class Fighter(BaseComponent):
 
         # drop items on death
         if self.parent.inventory:
-            for item in self.parent.inventory.items:
+            for item in [
+                item
+                for item in self.parent.inventory.items
+                if item.equippable.natural is False
+            ]:
                 item.place(self.parent.x, self.parent.y, self.gamemap)
 
     def heal(self, amount: int) -> int:
