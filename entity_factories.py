@@ -32,18 +32,6 @@ mamba_madness = PoisonCondition(
     damage=3,
 )
 
-# toxic crisis mobs
-snake = Actor(
-    char="s",
-    color=snake_green,
-    name="Green Mamba",
-    ai_cls=ai.Combatant,
-    equipment=Equipment(),
-    fighter=Fighter(hp=6, base_defense=0, base_power=5, attack_effect=mamba_madness),
-    inventory=Inventory(capacity=1),
-    level=Level(xp_given=1),
-    faction="snake",
-)
 
 # PC weapons
 ar_150 = Item(
@@ -52,7 +40,7 @@ ar_150 = Item(
     name="AR-150",
     equippable=RangedWeapon(
         accuracy=2,
-        armor_penetration=1,
+        armor_penetration=3,
         damage=6,
         range=15,
         ammo_type=None,  # add 5.56mm later
@@ -70,8 +58,41 @@ ballistic_vest = Item(
 )
 
 # mob weapons
+poison_fangs = Item(
+    char="",
+    color=(100, 100, 100),
+    name="Poison Fangs",
+    equippable=Weapon(natural=True, accuracy=1, armor_penetration=2, damage=2),
+)
+# mob armor --idk if i need this lmao
+scales = Item(
+    char="",
+    color=(0, 255, 0),
+    name="Scales",
+    equippable=Armor(
+        natural=True,
+        armor_value=1,
+        dodge_value=0,
+    ),
+)
 
-# mob armor
+# toxic crisis mobs
+snake = Actor(
+    char="s",
+    color=snake_green,
+    name="Green Mamba",
+    ai_cls=ai.Combatant,
+    equipment=Equipment(items=[poison_fangs]),
+    fighter=Fighter(
+        hp=6,
+        base_armor=1,
+        base_dodge=2,
+        base_accuracy=1,
+    ),
+    inventory=Inventory(capacity=1),
+    level=Level(xp_given=1),
+    faction="snake",
+)
 
 ###########################################################
 # OLD SHIT
