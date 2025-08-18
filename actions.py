@@ -200,16 +200,25 @@ class MeleeAction(ActionWithDirection):
             penetration_factor = ap - target.fighter.armor
             math_log = math_log + f" | AP: {penetration_factor})"
             damage = randint(1, weapon.equippable.damage)
-
+            print(f"initial damage: {damage}")
             if penetration_factor >= 0 and weapon.equippable.effect is not None:
                 effect = deepcopy(weapon.equippable.effect)
                 target.fighter.conditions.append(effect)
                 effect.parent = target
+                self.engine.message_log.add_message(
+                    "condition applied! fix this deirdre"
+                )
 
             if penetration_factor > 0:
-                damage * penetration_factor
+                damage *= penetration_factor + 1
+                print(
+                    f"damage after penetration multiplier ({penetration_factor}): {damage}"
+                )
             elif penetration_factor < 0:
-                damage // (abs(penetration_factor) + 1)
+                damage = damage // (abs(penetration_factor) + 1)
+                print(
+                    f"damage after penetration multiplier ({penetration_factor}): {damage}"
+                )
             if damage > 0:
                 # print(f'{attack_desc} for {damage} hit points.')
                 self.engine.message_log.add_message(

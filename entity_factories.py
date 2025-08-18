@@ -116,6 +116,22 @@ snake = Actor(
     faction="snake",
 )
 
+beef_snake = Actor(
+    char="S",
+    color=snake_green,
+    name="BEEF SNAKE",
+    ai_cls=ai.Combatant,
+    equipment=Equipment(weapon=poison_fangs),
+    fighter=Fighter(
+        hp=6,
+        base_armor=4,
+        base_dodge=0,
+        base_accuracy=1,
+    ),
+    inventory=Inventory(capacity=1),
+    level=Level(xp_given=1),
+    faction="snake",
+)
 ###########################################################
 # OLD SHIT
 # allied mobs
