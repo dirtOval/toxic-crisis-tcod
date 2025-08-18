@@ -36,7 +36,7 @@ mamba_madness = PoisonCondition(
     afflict_message=" is afflicted with Mamba Madness!",
     cure_message="'s head clears.",
     duration=3,
-    damage=3,
+    damage_die=3,
 )
 
 

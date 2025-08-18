@@ -30,7 +30,7 @@ class Fighter(BaseComponent):
         self.base_armor = base_armor
         self.base_dodge = base_dodge
         self.base_accuracy = base_accuracy
-        self.conditions = []
+        self.conditions = {}  # switched from list to dict for better condition lookup
         # self.attack_effect = attack_effect
 
     @property

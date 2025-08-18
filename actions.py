@@ -204,12 +204,20 @@ class MeleeAction(ActionWithDirection):
 
             # conditions!
             if penetration_factor >= 0 and weapon.equippable.effect is not None:
-                effect = deepcopy(weapon.equippable.effect)
-                target.fighter.conditions.append(effect)
-                effect.parent = target
-                self.engine.message_log.add_message(
-                    target.name + effect.afflict_message
-                )
+                if (
+                    target.fighter.conditions.get(weapon.equippable.effect.name)
+                    is not None
+                ):
+                    target.fighter.conditions[
+                        weapon.equippable.effect.name
+                    ].extend_condition()
+                else:
+                    effect = deepcopy(weapon.equippable.effect)
+                    target.fighter.conditions[effect.name] = effect
+                    effect.parent = target
+                    self.engine.message_log.add_message(
+                        target.name + effect.afflict_message
+                    )
 
             if penetration_factor > 0:
                 damage *= penetration_factor + 1

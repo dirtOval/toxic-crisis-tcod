@@ -18,6 +18,7 @@ class Condition:
         self.name = name
         self.afflict_message = afflict_message
         self.cure_message = cure_message
+        self._initial_duration = duration
         self.duration = duration
         self.parent = None
 
@@ -28,7 +29,10 @@ class Condition:
                 self.parent.parent.engine.message_log.add_message(
                     self.parent.name + self.cure_message
                 )
-                self.parent.fighter.conditions.remove(self)
+                self.parent.fighter.conditions[self.name] = None
+
+    def extend_condition(self):
+        self.duration += randint(1, self._initial_duration)
 
 
 class PoisonCondition(Condition):
@@ -38,7 +42,7 @@ class PoisonCondition(Condition):
         afflict_message: str = " gets sick with <Unnamed Poison>",
         cure_message: str = " is no longer sick with <Unnamed Poison>",
         duration: int | None = None,
-        damage: int = 1,
+        damage_die: int = 1,
     ):
         super().__init__(
             name=name,
@@ -46,7 +50,8 @@ class PoisonCondition(Condition):
             cure_message=cure_message,
             duration=duration,
         )
-        self.damage = randint(1, damage)
+        self.damage_die = damage_die
+        self.damage = randint(1, damage_die)
 
     def proc(self):
         self.parent.fighter.hp -= self.damage
@@ -54,3 +59,10 @@ class PoisonCondition(Condition):
             f"{self.parent.name} takes {self.damage} damage from poison."
         )
         super().proc()
+
+    def extend_condition(self):
+        super().extend_condition()
+        self.damage += randint(1, self.damage_die)
+        self.parent.parent.engine.message_log.add_message(
+            f"{self.parent.name}'s {self.name} gets worse!"
+        )
