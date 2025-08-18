@@ -201,12 +201,14 @@ class MeleeAction(ActionWithDirection):
             math_log = math_log + f" | AP: {penetration_factor})"
             damage = randint(1, weapon.equippable.damage)
             print(f"initial damage: {damage}")
+
+            # conditions!
             if penetration_factor >= 0 and weapon.equippable.effect is not None:
                 effect = deepcopy(weapon.equippable.effect)
                 target.fighter.conditions.append(effect)
                 effect.parent = target
                 self.engine.message_log.add_message(
-                    "condition applied! fix this deirdre"
+                    target.name + effect.afflict_message
                 )
 
             if penetration_factor > 0:

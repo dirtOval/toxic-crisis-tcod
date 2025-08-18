@@ -33,6 +33,8 @@ player = Actor(
 # CONDITIONS
 mamba_madness = PoisonCondition(
     name="Mamba Madness",
+    afflict_message=" is afflicted with Mamba Madness!",
+    cure_message="'s head clears.",
     duration=3,
     damage=3,
 )

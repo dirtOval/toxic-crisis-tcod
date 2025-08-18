@@ -11,9 +11,13 @@ class Condition:
     def __init__(
         self,
         name: str = "<Unnamed Condition>",
+        afflict_message: str = " gets sick with <Unnamed Condition>",
+        cure_message: str = " is no longer sick with <Unnamed Condition",
         duration: int | None = None,
     ):
         self.name = name
+        self.afflict_message = afflict_message
+        self.cure_message = cure_message
         self.duration = duration
         self.parent = None
 
@@ -21,6 +25,9 @@ class Condition:
         if self.duration:
             self.duration -= 1
             if self.duration < 1:
+                self.parent.parent.engine.message_log.add_message(
+                    self.parent.name + self.cure_message
+                )
                 self.parent.fighter.conditions.remove(self)
 
 
@@ -28,12 +35,22 @@ class PoisonCondition(Condition):
     def __init__(
         self,
         name: str = "<Unnamed Poison>",
+        afflict_message: str = " gets sick with <Unnamed Poison>",
+        cure_message: str = " is no longer sick with <Unnamed Poison>",
         duration: int | None = None,
         damage: int = 1,
     ):
-        super().__init__(name=name, duration=duration)
+        super().__init__(
+            name=name,
+            afflict_message=afflict_message,
+            cure_message=cure_message,
+            duration=duration,
+        )
         self.damage = randint(1, damage)
 
     def proc(self):
         self.parent.fighter.hp -= self.damage
+        self.parent.parent.engine.message_log.add_message(
+            f"{self.parent.name} takes {self.damage} damage from poison."
+        )
         super().proc()
