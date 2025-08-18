@@ -102,11 +102,12 @@ class Fighter(BaseComponent):
 
         # drop items on death
         if self.parent.inventory:
-            for item in [
-                item
-                for item in self.parent.inventory.items
-                if item.equippable.natural is False
-            ]:
+            # for item in [
+            #     item
+            #     for item in self.parent.inventory.items
+            #     if item.equippable.natural is False
+            # ]:
+            for item in self.parent.inventory.items:  # natural weapons maybe not needed
                 item.place(self.parent.x, self.parent.y, self.gamemap)
 
     def heal(self, amount: int) -> int:

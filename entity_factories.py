@@ -79,7 +79,7 @@ poison_fangs = Item(
     color=(100, 100, 100),
     name="Poison Fangs",
     equippable=Weapon(
-        natural=True,
+        # natural=True,
         accuracy=1,
         armor_penetration=2,
         damage=2,
@@ -92,7 +92,7 @@ scales = Item(
     color=(0, 255, 0),
     name="Scales",
     equippable=Armor(
-        natural=True,
+        # natural=True,
         armor_value=1,
         dodge_value=0,
     ),

@@ -18,7 +18,7 @@ class Equippable(BaseComponent):
     def __init__(
         self,
         equipment_type: EquipmentType,
-        natural: bool = False,
+        # natural: bool = False,
         #  power_bonus: int = 0,
         #  defense_bonus: int = 0,
     ):
@@ -34,13 +34,13 @@ class Armor(Equippable):
     def __init__(
         self,
         equipment_type: EquipmentType = EquipmentType.ARMOR,
-        natural: bool = False,
+        # natural: bool = False,
         armor_value: int = 0,
         dodge_value: int = 0,
     ):
         super().__init__(
             equipment_type=equipment_type,
-            natural=natural,
+            # natural=natural,
         )
         self.armor_value = armor_value
         self.dodge_value = dodge_value
@@ -54,7 +54,7 @@ class Weapon(Equippable):
         equipment_type: EquipmentType = EquipmentType.WEAPON,
         #    power_bonus: int = 0,
         #    defense_bonus: int = 0,
-        natural: bool = False,
+        # natural: bool = False,
         accuracy: int = 0,
         armor_penetration: int = 0,
         damage: int = 1,
@@ -62,7 +62,7 @@ class Weapon(Equippable):
     ):
         super().__init__(
             equipment_type=equipment_type,
-            natural=natural,
+            # natural=natural,
             # power_bonus=power_bonus,
             # defense_bonus=defense_bonus
         )
@@ -80,7 +80,7 @@ class RangedWeapon(Weapon):
         self,
         #  power_bonus: int = 0,
         #  defense_bonus: int = 0,
-        natural: bool = False,
+        # natural: bool = False,
         accuracy: int = 0,
         armor_penetration: int = 0,
         damage: int = 1,
@@ -91,7 +91,7 @@ class RangedWeapon(Weapon):
             equipment_type=EquipmentType.RANGED,
             #  power_bonus=power_bonus,
             #  defense_bonus=defense_bonus,
-            natural=natural,
+            # natural=natural,
             accuracy=accuracy,
             armor_penetration=armor_penetration,
             damage=damage,

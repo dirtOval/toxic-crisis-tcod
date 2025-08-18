@@ -16,6 +16,10 @@ DONE-add AV, DV to green mamba
 DONE-update equipment.py to make PC AV and weapon stats affect gameplay
 DONE-move attack_effect to weapons
 DONE-update melee and ranged attack actions to do attack roll -> damage calculation
+-update ranged combat actually!
+-error about ranged weapons not having natural attribute. fix it!
+-make condition proc report damage. condition needs a proc_message attribute
+-make combat report numbers!
 -add bleed status effect (in conditions)--subclass poisioncondition, drops a blood item for every round as long as it's bleeding
 -add a new category of entity you can't pick up, blood.
 
