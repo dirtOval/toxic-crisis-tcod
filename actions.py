@@ -175,19 +175,21 @@ class MeleeAction(ActionWithDirection):
         weapon = self.entity.equipment.weapon
         critical = False
         hit_roll = randint(1, ATTACK_DIE)
-        if hit_roll == ATTACK_DIE:
-            critical = True
         roll_with_modifiers = hit_roll + self.entity.fighter.accuracy
         attack_desc = (
             f"{self.entity.name.capitalize()} attacks {target.name} with {weapon.name}"
         )
+        if hit_roll == ATTACK_DIE:
+            attack_desc = "CRITICAL HIT! " + attack_desc
+            critical = True
+        math_log = f"({roll_with_modifiers} vs {BASE_DODGE + target.fighter.dodge}"
         if self.entity is self.engine.player:
             attack_color = color.player_atk
         else:
             attack_color = color.enemy_atk
         if roll_with_modifiers < (BASE_DODGE + target.fighter.dodge) and not critical:
             self.engine.message_log.add_message(
-                f"{attack_desc} but misses!", attack_color
+                f"{attack_desc} but misses! " + math_log + ")", attack_color
             )
         else:
             ap = (
@@ -196,6 +198,7 @@ class MeleeAction(ActionWithDirection):
                 else weapon.equippable.armor_penetration
             )
             penetration_factor = ap - target.fighter.armor
+            math_log = math_log + f" | AP: {penetration_factor})"
             damage = randint(1, weapon.equippable.damage)
 
             if penetration_factor >= 0 and weapon.equippable.effect is not None:
@@ -210,13 +213,14 @@ class MeleeAction(ActionWithDirection):
             if damage > 0:
                 # print(f'{attack_desc} for {damage} hit points.')
                 self.engine.message_log.add_message(
-                    f"{attack_desc} for {damage} hit points", attack_color
+                    f"{attack_desc} for {damage} hit points " + math_log, attack_color
                 )
                 target.fighter.hp -= damage
             else:
                 # print(f'{attack_desc} but does no damage')
                 self.engine.message_log.add_message(
-                    f"{attack_desc} but fails to penetrate their armor", attack_color
+                    f"{attack_desc} but fails to penetrate their armor " + math_log,
+                    attack_color,
                 )
 
         # placeholder lmao
