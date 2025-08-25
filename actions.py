@@ -164,6 +164,9 @@ class ActionWithTarget(Action):
         return self.engine.game_map.get_actor_at_location(*self.target_xy)
 
 
+# def AttackRoll(weapon, entity, target, verb):
+
+
 class MeleeAction(ActionWithDirection):
     def perform(self) -> None:
         target = self.target_actor
@@ -294,37 +297,105 @@ class RangedAction(ActionWithTarget):
         if self.entity.equipment.ranged is None:
             raise exceptions.Impossible("You do not have a ranged weapon equipped!")
         weapon = self.entity.equipment.ranged
-        # add ammo later!
-        # ammo = [item for item in self.entity.inventory.items if item.name]
-        # if weapon.ammo_type not in self.entity.inventory.items:
-        #   raise exceptions.Impossible(f'Out of ammo for {weapon}!')
-        if self.entity.distance(*self.target_xy) > weapon.equippable.range:
-            raise exceptions.Impossible("Out of range!")
         target = self.target_actor
         if not target:
             raise exceptions.Impossible("Nothing to shoot there.")
-
-        damage = weapon.equippable.power_bonus - target.fighter.defense
-
+        critical = False
+        hit_roll = randint(1, ATTACK_DIE)
+        roll_with_modifiers = hit_roll + self.entity.fighter.accuracy
         attack_desc = (
             f"{self.entity.name.capitalize()} shoots {target.name} with {weapon.name}"
         )
+        if hit_roll == ATTACK_DIE:
+            attack_desc = "CRITICAL HIT! " + attack_desc
+            critical = True
+        math_log = f"({roll_with_modifiers} vs {BASE_DODGE + target.fighter.dodge}"
         if self.entity is self.engine.player:
             attack_color = color.player_atk
         else:
             attack_color = color.enemy_atk
-
-        if damage > 0:
-            # print(f'{attack_desc} for {damage} hit points.')
+        if roll_with_modifiers < (BASE_DODGE + target.fighter.dodge) and not critical:
             self.engine.message_log.add_message(
-                f"{attack_desc} for {damage} hit points.", attack_color
+                f"{attack_desc} but misses! " + math_log + ")", attack_color
             )
-            target.fighter.hp -= damage
         else:
-            # print(f'{attack_desc} but does no damage')
-            self.engine.message_log.add_message(
-                f"{attack_desc} but does no damage", attack_color
+            ap = (
+                weapon.equippable.armor_penetration * 2
+                if critical
+                else weapon.equippable.armor_penetration
             )
+            penetration_factor = ap - target.fighter.armor
+            math_log = math_log + f" | AP: {penetration_factor})"
+            damage = randint(1, weapon.equippable.damage)
+            print(f"initial damage: {damage}")
+
+            # conditions!
+            if penetration_factor >= 0 and weapon.equippable.effect is not None:
+                if (
+                    target.fighter.conditions.get(weapon.equippable.effect.name)
+                    is not None
+                ):
+                    target.fighter.conditions[
+                        weapon.equippable.effect.name
+                    ].extend_condition()
+                else:
+                    effect = deepcopy(weapon.equippable.effect)
+                    target.fighter.conditions[effect.name] = effect
+                    effect.parent = target
+                    self.engine.message_log.add_message(
+                        target.name + effect.afflict_message
+                    )
+
+            if penetration_factor > 0:
+                damage *= penetration_factor + 1
+                print(
+                    f"damage after penetration multiplier ({penetration_factor}): {damage}"
+                )
+            elif penetration_factor < 0:
+                damage = damage // (abs(penetration_factor) + 1)
+                print(
+                    f"damage after penetration multiplier ({penetration_factor}): {damage}"
+                )
+            if damage > 0:
+                # print(f'{attack_desc} for {damage} hit points.')
+                self.engine.message_log.add_message(
+                    f"{attack_desc} for {damage} hit points " + math_log, attack_color
+                )
+                target.fighter.hp -= damage
+            else:
+                # print(f'{attack_desc} but does no damage')
+                self.engine.message_log.add_message(
+                    f"{attack_desc} but fails to penetrate their armor " + math_log,
+                    attack_color,
+                )
+        # add ammo later!
+        # ammo = [item for item in self.entity.inventory.items if item.name]
+        # if weapon.ammo_type not in self.entity.inventory.items:
+        #   raise exceptions.Impossible(f'Out of ammo for {weapon}!')
+        # if self.entity.distance(*self.target_xy) > weapon.equippable.range:
+        #    raise exceptions.Impossible("Out of range!")
+
+        # damage = weapon.equippable.power_bonus - target.fighter.defense
+
+        # attack_desc = (
+        #    f"{self.entity.name.capitalize()} shoots {target.name} with {weapon.name}"
+        # )
+        # if self.entity is self.engine.player:
+        #    attack_color = color.player_atk
+        # else:
+        #    attack_color = color.enemy_atk
+
+        # if damage > 0:
+        #    # print(f'{attack_desc} for {damage} hit points.')
+        #    self.engine.message_log.add_message(
+        #        f"{attack_desc} for {damage} hit points.", attack_color
+        #    )
+        #    target.fighter.hp -= damage
+        # else:
+        #    # print(f'{attack_desc} but does no damage')
+        #    self.engine.message_log.add_message(
+        #        f"{attack_desc} but does no damage", attack_color
+        #    )
 
 
 class MovementAction(ActionWithDirection):
