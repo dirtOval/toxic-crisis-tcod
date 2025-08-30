@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Dict, Iterator, List, Tuple, TYPE_CHECKING
 import random
+import numpy as np
 
 import tile_types
 
@@ -202,10 +203,17 @@ def test_level(  # for testing new mechanics, mobs, etc
 ) -> GameMap:
     player = engine.player
     dungeon = GameMap(engine, map_width, map_height, entities=[player])
+
     room = RectangularRoom(1, 1, map_width - 2, map_height - 2)
-    dungeon.tiles[room.inner] = tile_types.floor
+    with np.nditer(dungeon.tiles[room.inner], op_flags=["readwrite"]) as zone:
+        for tile in zone:
+            cointoss = random.randint(0, 1)
+            if cointoss == 0:
+                tile[...] = tile_types.floor
+            else:
+                tile[...] = tile_types.wall
     player.place(*room.center, dungeon)
-    # generate_crystals(dungeon, 12) <-- don't need this anymore lol
+    # generate_crystals(dungeon, 12)
 
     # entity_factories.crystal_well.spawn(dungeon, 35, 25)
     # entity_factories.miner.spawn(dungeon, 40, 25)
@@ -233,6 +241,11 @@ def generate_dungeon(
     player = engine.player
     dungeon = GameMap(engine, map_width, map_height, entities=[player])
 
+    for row in range(len(dungeon.tiles)):
+        for tile in range(len(row)):
+            print(row, tile)
+
+    # below here is tutorial stuff
     rooms: List[RectangularRoom] = []
 
     center_of_last_room = (0, 0)
@@ -268,4 +281,3 @@ def generate_dungeon(
         rooms.append(new_room)
 
     return dungeon
-

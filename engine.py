@@ -84,6 +84,8 @@ class Engine:
 
         self.message_log.render(console=console, x=51, y=10, width=28, height=40)
 
+        console.print(x=51, y=2, string="Big Snake Hunter")
+
         render_functions.render_bar(
             console=console,
             current_value=self.player.fighter.hp,

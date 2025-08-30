@@ -16,7 +16,7 @@ from condition import PoisonCondition
 player = Actor(
     char="@",
     color=(255, 255, 255),
-    name="Player",
+    name="Big Snake Hunter",
     ai_cls=ai.Combatant,
     equipment=Equipment(),
     fighter=Fighter(
