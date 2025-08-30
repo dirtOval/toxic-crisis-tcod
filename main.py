@@ -90,4 +90,3 @@ def main() -> None:
 # boilerplate to make sure main only runs when the script is called
 if __name__ == "__main__":
     main()
-

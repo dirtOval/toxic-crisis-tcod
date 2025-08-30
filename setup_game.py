@@ -20,8 +20,8 @@ background_image = tcod.image.load("menu_background.png")[:, :, :3]
 
 
 def test_level() -> Engine:
-    map_width = 80
-    map_height = 43
+    map_width = 50  # formerly 80
+    map_height = 50  # formerly 43
     room_max_size = 10
     room_min_size = 6
     max_rooms = 30
