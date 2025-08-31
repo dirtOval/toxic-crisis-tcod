@@ -1,6 +1,6 @@
 import components.ai as ai
 
-# from components import consumable, equippable
+from components.consumable import HealingConsumable
 from components.equippable import Weapon, RangedWeapon, Armor
 from components.harvestable import Harvestable
 from components.equipment import Equipment
@@ -22,7 +22,7 @@ player = Actor(
     fighter=Fighter(
         hp=30,
         base_armor=0,
-        base_dodge=0,
+        base_dodge=1,
         base_accuracy=0,
     ),
     inventory=Inventory(capacity=26),
@@ -32,11 +32,11 @@ player = Actor(
 
 # CONDITIONS
 mamba_madness = PoisonCondition(
-    name="Mamba Madness",
-    afflict_message=" is afflicted with Mamba Madness!",
-    cure_message="'s head clears.",
+    name="snake venom",
+    afflict_message=" is afflicted with snake venom!",
+    cure_message=" feels better.",
     duration=3,
-    damage_die=3,
+    damage_die=2,
 )
 
 
@@ -75,6 +75,14 @@ ballistic_vest = Item(
     ),
 )
 
+
+medkit = Item(
+    char="+",
+    color=(0, 0, 255),
+    name="Medkit",
+    consumable=HealingConsumable(amount=6),
+)
+
 # mob weapons
 poison_fangs = Item(
     char="",
@@ -86,6 +94,18 @@ poison_fangs = Item(
         armor_penetration=2,
         damage=2,
         effect=mamba_madness,
+    ),
+)
+
+glock = Item(
+    char="-",
+    color=(200, 200, 200),
+    name="Glock 1900",
+    equippable=RangedWeapon(
+        accuracy=1,
+        armor_penetration=3,
+        damage=3,
+        range=5,
     ),
 )
 # mob armor --idk if i need this lmao
@@ -101,6 +121,23 @@ scales = Item(
 )
 
 # toxic crisis mobs
+
+cop = Actor(
+    char="C",
+    color=(0, 0, 255),
+    name="Park Cop",
+    ai_cls=ai.CopAI,
+    equipment=Equipment(ranged=glock, weapon=combat_knife),
+    fighter=Fighter(
+        hp=10,
+        base_armor=3,
+        base_dodge=0,
+        base_accuracy=0,
+    ),
+    inventory=Inventory(capacity=1, items=[glock, medkit]),
+    level=Level(xp_given=1),
+    faction="cop",
+)
 snake = Actor(
     char="s",
     color=snake_green,
@@ -120,13 +157,13 @@ snake = Actor(
 
 beef_snake = Actor(
     char="S",
-    color=snake_green,
-    name="BEEF SNAKE",
+    color=virus_teal,
+    name="Mega Snake",
     ai_cls=ai.Combatant,
     equipment=Equipment(weapon=poison_fangs),
     fighter=Fighter(
         hp=6,
-        base_armor=4,
+        base_armor=6,
         base_dodge=0,
         base_accuracy=1,
     ),

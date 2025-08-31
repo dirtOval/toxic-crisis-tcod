@@ -99,6 +99,7 @@ class Fighter(BaseComponent):
     which is no good. I also just don't know if i want XP in the game.
     """
         # self.engine.player.level.add_xp(self.parent.level.xp_given)
+        self.engine.score += 100
 
         # drop items on death
         if self.parent.inventory:

@@ -49,6 +49,8 @@ class Engine:
         self.player_is_ghost = False
         self.player_teleport = False
         self.auto_wait = False
+        self.score = 0
+        self.police_called = False
 
     def handle_enemy_turns(self) -> None:
         for entity in set(self.game_map.actors) - {self.player}:
@@ -82,7 +84,7 @@ class Engine:
     def render(self, console: Console) -> None:
         self.game_map.render(console)
 
-        self.message_log.render(console=console, x=51, y=10, width=28, height=40)
+        self.message_log.render(console=console, x=51, y=9, width=28, height=40)
 
         console.print(x=51, y=2, string="Big Snake Hunter")
 
@@ -93,6 +95,8 @@ class Engine:
             total_width=20,
         )
 
+        console.print(x=51, y=5, string=f"Score: {self.score}")
+
         # render_functions.render_dungeon_level(
         #    console=console,
         #    dungeon_level=self.game_world.current_floor,
@@ -100,7 +104,7 @@ class Engine:
         # )
 
         render_functions.render_names_at_mouse_location(
-            console=console, x=51, y=9, engine=self
+            console=console, x=51, y=8, engine=self
         )
 
     def save_as(self, filename: str) -> None:

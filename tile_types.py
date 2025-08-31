@@ -37,13 +37,21 @@ def new_tile(
 
 SHROUD = np.array((ord(" "), (255, 255, 255), (0, 0, 0)), dtype=graphic_dt)
 
+
+def random_color():
+    colors = (randint(0, 255), randint(0, 255), randint(0, 255))
+    return colors
+
+
 floor = new_tile(
     walkable=True,
     transparent=True,
     # dark=(ord(' '),(255, 255, 255), (50, 50, 150)),
     # light=(ord(' '), (255, 255, 255), (200, 180, 50)),
-    dark=(ord("."), (0, 0, 125), (0, 0, 0)),
-    light=(ord("."), (25, 0, 150), (0, 0, 25)),
+    # dark=(ord("."), (0, 0, 125), (0, 0, 0)),
+    # light=(ord("."), (25, 0, 150), (0, 0, 25)),
+    dark=(ord("."), (25, 25, 25), (0, 0, 0)),
+    light=(ord("."), (0, 112, 112), (0, 25, 0)),
 )
 wall = new_tile(
     walkable=False,
@@ -72,4 +80,3 @@ def random() -> new_tile:
 
 
 # add glass? transparent, but not walkable
-

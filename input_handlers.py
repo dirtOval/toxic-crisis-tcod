@@ -7,6 +7,8 @@ from typing import Callable, Iterable, Optional, Tuple, TYPE_CHECKING, Union
 
 import tcod.event
 
+from procgen import summon_cops
+
 import actions
 from actions import (
     Action,
@@ -21,6 +23,9 @@ import color
 import exceptions
 # for auto wait
 # import time
+
+prison_graphic = tcod.image.load("life_in_prison.png")[:, :, :3]
+victory_graphic = tcod.image.load("victory_screen.png")[:, :, :3]
 
 # find out wtf TYPE_CHECKING is
 if TYPE_CHECKING:
@@ -143,6 +148,21 @@ class EventHandler(BaseEventHandler):
                 return GameOverEventHandler(self.engine)
             elif self.engine.player.level.requires_level_up:
                 return LevelUpEventHandler(self.engine)
+            elif self.engine.score >= 500 and self.engine.police_called is False:
+                self.engine.message_log.add_message(
+                    "A stern voice rings out over bullhorn:"
+                )
+                self.engine.message_log.add_message(
+                    '"Big Snake Hunter! We have you surrounded! Come out with your hands up!"',
+                    color.enemy_atk,
+                )
+                self.engine.police_called = True
+                return ArrestEventHandler(self.engine)
+            elif (
+                self.engine.police_called is True
+                and len(list(self.engine.game_map.actors)) == 1
+            ):
+                return VictoryEventHandler(self.engine)
 
             # if not dead or leveling up, handle conditions
             player_conditions = self.engine.player.fighter.conditions
@@ -223,6 +243,47 @@ class AskUserEventHandler(EventHandler):
     def on_exit(self) -> Optional[ActionOrHandler]:
         # self.engine.event_handler = MainGameEventHandler(self.engine)
         return MainGameEventHandler(self.engine)
+
+
+class ArrestEventHandler(AskUserEventHandler):
+    TITLE = "Surrender To The National Park Service?"
+
+    def on_render(self, console: tcod.console.Console) -> None:
+        super().on_render(console)
+        x = 10
+        y = 20
+
+        width = 60
+
+        console.draw_frame(
+            x=10,
+            y=y,
+            width=width,
+            height=7,
+            title=self.TITLE,
+            clear=True,
+            fg=(255, 255, 255),
+            bg=(0, 0, 0),
+        )
+
+        console.print(x=x + 1, y=y + 1, string="1) i will go peacefully")
+        console.print(
+            x=x + 1,
+            y=y + 2,
+            string="2) Big Snake Hunter will never surrender",
+        )
+
+    def ev_keydown(self, event: tcod.event.KeyDown) -> Optional[ActionOrHandler]:
+        if event.sym == tcod.event.KeySym.N1:
+            # go to jail
+            return LifeInPrisonEventHandler(self.engine)
+
+        elif event.sym == tcod.event.KeySym.N2:
+            self.engine.message_log.add_message(
+                "Then pay with your blood!", (0, 0, 255)
+            )
+            summon_cops(self.engine.game_map, 10)
+            return MainGameEventHandler(self.engine)
 
 
 # probably wanna disable this later
@@ -815,7 +876,7 @@ class MainGameEventHandler(EventHandler):
         elif key == tcod.event.KeySym.D:
             return InventoryDropHandler(self.engine)
 
-        elif key == tcod.event.KeySym.L:
+        elif key == tcod.event.KeySym.X:
             return LookHandler(self.engine)
 
         elif key == tcod.event.KeySym.F:
@@ -824,8 +885,8 @@ class MainGameEventHandler(EventHandler):
                 callback=lambda xy: actions.RangedAction(self.engine.player, xy),
             )
 
-        elif key == tcod.event.KeySym.C:
-            return CharacterScreenEventHandler(self.engine)
+        # elif key == tcod.event.KeySym.C:
+        #    return CharacterScreenEventHandler(self.engine)
 
         # debugger activate
         elif key == tcod.event.KeySym.GRAVE:
@@ -841,8 +902,8 @@ class MainGameEventHandler(EventHandler):
         elif key == tcod.event.KeySym.KP_PLUS:
             return SpawnerMenuHandler(self.engine)
 
-        elif key == tcod.event.KeySym.KP_PERIOD:
-            self.engine.auto_wait = not self.engine.auto_wait
+        # elif key == tcod.event.KeySym.KP_PERIOD:
+        #    self.engine.auto_wait = not self.engine.auto_wait
 
         # auto-wait enable -- NOT WORKING
         # elif key == tcod.event.KeySym.KP_PERIOD:
@@ -881,6 +942,16 @@ class GameOverEventHandler(EventHandler):
     def ev_keydown(self, event: tcod.event.KeyDown) -> None:
         if event.sym == tcod.event.KeySym.ESCAPE:
             raise SystemExit()
+
+
+class LifeInPrisonEventHandler(GameOverEventHandler):
+    def on_render(self, console: tcod.Console) -> None:
+        console.draw_semigraphics(prison_graphic, 0, 0)
+
+
+class VictoryEventHandler(GameOverEventHandler):
+    def on_render(self, console: tcod.Console) -> None:
+        console.draw_semigraphics(victory_graphic, 0, 0)
 
 
 class HistoryViewer(EventHandler):

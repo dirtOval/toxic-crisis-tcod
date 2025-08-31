@@ -56,7 +56,7 @@ class PoisonCondition(Condition):
     def proc(self):
         self.parent.fighter.hp -= self.damage
         self.parent.parent.engine.message_log.add_message(
-            f"{self.parent.name} takes {self.damage} damage from poison."
+            f"{self.parent.name} takes {self.damage} damage from poison.", (255, 0, 0)
         )
         super().proc()
 
