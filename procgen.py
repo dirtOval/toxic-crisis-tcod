@@ -263,7 +263,7 @@ def toxic_crisis_level(
                 tile[...] = tile_types.floor
 
     player.place(*room.center, dungeon)
-    place_entities(room, dungeon, entity_factories.snake, random.randint(1, 20))
+    place_entities(room, dungeon, entity_factories.snake, random.randint(1, 25))
     place_entities(room, dungeon, entity_factories.beef_snake, random.randint(1, 1))
 
     return dungeon

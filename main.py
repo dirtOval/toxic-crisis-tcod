@@ -28,7 +28,7 @@ def main() -> None:
     auto_speed = 0.5
 
     tileset = tcod.tileset.load_tilesheet(
-        "terminal10x10_gs_tc.png", 32, 8, tcod.tileset.CHARMAP_TCOD
+        "data/terminal10x10_gs_tc.png", 32, 8, tcod.tileset.CHARMAP_TCOD
     )
 
     handler: input_handlers.BaseEventHandler = setup_game.MainMenu()

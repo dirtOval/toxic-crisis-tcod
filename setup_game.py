@@ -16,7 +16,7 @@ import input_handlers
 from procgen import generate_dungeon
 from render_order import RenderOrder
 
-background_image = tcod.image.load("title_screen.png")[:, :, :3]
+background_image = tcod.image.load("data/title_screen.png")[:, :, :3]
 
 
 def test_level() -> Engine:

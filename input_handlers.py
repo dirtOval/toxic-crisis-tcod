@@ -24,8 +24,8 @@ import exceptions
 # for auto wait
 # import time
 
-prison_graphic = tcod.image.load("life_in_prison.png")[:, :, :3]
-victory_graphic = tcod.image.load("victory_screen.png")[:, :, :3]
+prison_graphic = tcod.image.load("data/life_in_prison.png")[:, :, :3]
+victory_graphic = tcod.image.load("data/victory_screen.png")[:, :, :3]
 
 # find out wtf TYPE_CHECKING is
 if TYPE_CHECKING:
