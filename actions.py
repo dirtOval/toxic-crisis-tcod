@@ -176,9 +176,14 @@ class MeleeAction(ActionWithDirection):
 
         # damage = self.entity.fighter.power - target.fighter.defense
         weapon = self.entity.equipment.weapon
+        attack_accuracy = self.entity.fighter.accuracy
+        if not weapon:
+            weapon = self.entity.fighter.natural_weapon
+            attack_accuracy = self.entity.fighter.natural_weapon.equippable.accuracy
+
         critical = False
         hit_roll = randint(1, ATTACK_DIE)
-        roll_with_modifiers = hit_roll + self.entity.fighter.accuracy
+        roll_with_modifiers = hit_roll + attack_accuracy
         attack_desc = (
             f"{self.entity.name.capitalize()} attacks {target.name} with {weapon.name}"
         )

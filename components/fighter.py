@@ -10,6 +10,7 @@ from render_order import RenderOrder
 
 if TYPE_CHECKING:
     from entity import Actor
+    from components.equipment import Weapon
     # from condition import Condition
 
 
@@ -23,6 +24,7 @@ class Fighter(BaseComponent):
         base_armor: int = 0,
         base_dodge: int = 0,
         base_accuracy: int = 0,
+        natural_weapon: Weapon = None,
         # attack_effect: Condition = None,
     ):
         self.max_hp = hp
@@ -30,6 +32,7 @@ class Fighter(BaseComponent):
         self.base_armor = base_armor
         self.base_dodge = base_dodge
         self.base_accuracy = base_accuracy
+        self.natural_weapon = natural_weapon
         self.conditions = {}  # switched from list to dict for better condition lookup
         # self.attack_effect = attack_effect
 

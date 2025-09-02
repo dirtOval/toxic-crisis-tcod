@@ -144,6 +144,16 @@ class EventHandler(BaseEventHandler):
         if isinstance(action_or_state, BaseEventHandler):
             return action_or_state
         if self.handle_action(action_or_state):
+            # if not dead or leveling up, handle conditions
+            player_conditions = self.engine.player.fighter.conditions
+            condition_removal = []
+            for condition in player_conditions:  # this should only affect players?
+                if player_conditions[condition] is not None:
+                    player_conditions[condition].proc()
+                else:
+                    condition_removal.append(condition)
+            for condition in condition_removal:
+                player_conditions.pop(condition)
             if not self.engine.player.is_alive:
                 return GameOverEventHandler(self.engine)
             elif self.engine.player.level.requires_level_up:
@@ -163,22 +173,6 @@ class EventHandler(BaseEventHandler):
                 and len(list(self.engine.game_map.actors)) == 1
             ):
                 return VictoryEventHandler(self.engine)
-
-            # if not dead or leveling up, handle conditions
-            player_conditions = self.engine.player.fighter.conditions
-            # print(f"player conditions: {player_conditions}")
-            # for condition in player_conditions:
-            #    print(
-            #        f"duration of {player_conditions[condition].name}: {player_conditions[condition].duration}"
-            #    )
-            condition_removal = []
-            for condition in player_conditions:  # this should only affect players?
-                if player_conditions[condition] is not None:
-                    player_conditions[condition].proc()
-                else:
-                    condition_removal.append(condition)
-            for condition in condition_removal:
-                player_conditions.pop(condition)
 
             return MainGameEventHandler(self.engine)
         return self

@@ -12,6 +12,17 @@ from entity import Actor, Item, MobSpawner, Resource
 from color import guard_pink, virus_teal, snake_green
 from condition import PoisonCondition
 
+fist = Item(
+    char="",
+    color=(0, 0, 0),
+    name="Fist",
+    equippable=Weapon(
+        accuracy=3,
+        armor_penetration=1,
+        damage=2,
+    ),
+)
+
 # player = Entity(char='@', color=(255, 255, 255), name='Player', blocks_movement=True)
 player = Actor(
     char="@",
@@ -24,6 +35,7 @@ player = Actor(
         base_armor=0,
         base_dodge=1,
         base_accuracy=0,
+        natural_weapon=fist,
     ),
     inventory=Inventory(capacity=26),
     level=Level(level_up_base=200),
@@ -64,6 +76,8 @@ combat_knife = Item(
         damage=4,
     ),
 )
+
+
 # PC armor
 ballistic_vest = Item(
     char="]",
@@ -90,7 +104,7 @@ poison_fangs = Item(
     name="Poison Fangs",
     equippable=Weapon(
         # natural=True,
-        accuracy=1,
+        accuracy=2,
         armor_penetration=2,
         damage=2,
         effect=mamba_madness,
@@ -133,6 +147,7 @@ cop = Actor(
         base_armor=3,
         base_dodge=0,
         base_accuracy=0,
+        natural_weapon=fist,
     ),
     inventory=Inventory(capacity=1, items=[glock, medkit]),
     level=Level(xp_given=1),
@@ -148,7 +163,8 @@ snake = Actor(
         hp=6,
         base_armor=1,
         base_dodge=2,
-        base_accuracy=1,
+        base_accuracy=0,
+        natural_weapon=poison_fangs,
     ),
     inventory=Inventory(capacity=1),
     level=Level(xp_given=1),
@@ -165,7 +181,8 @@ beef_snake = Actor(
         hp=6,
         base_armor=6,
         base_dodge=0,
-        base_accuracy=1,
+        base_accuracy=2,
+        natural_weapon=poison_fangs,
     ),
     inventory=Inventory(capacity=1),
     level=Level(xp_given=1),
