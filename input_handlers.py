@@ -934,6 +934,11 @@ class GameOverEventHandler(EventHandler):
         self.on_quit()
 
     def ev_keydown(self, event: tcod.event.KeyDown) -> None:
+        if event.sym == tcod.event.KeySym.R:
+            from setup_game import toxic_crisis
+
+            return MainGameEventHandler(toxic_crisis())
+
         if event.sym == tcod.event.KeySym.ESCAPE:
             raise SystemExit()
 

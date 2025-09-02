@@ -81,7 +81,7 @@ class Fighter(BaseComponent):
 
     def die(self) -> None:
         if self.engine.player is self.parent:
-            death_message = "You died!"
+            death_message = "You died!\nPress 'r' to try again."
             death_message_color = color.player_die
             # self.engine.event_handler = GameOverEventHandler(self.engine)
         else:
