@@ -155,6 +155,10 @@ class EventHandler(BaseEventHandler):
             for condition in condition_removal:
                 player_conditions.pop(condition)
             if not self.engine.player.is_alive:
+                if self.engine.police_called:
+                    self.engine.message_log.add_message(
+                        "JUSTICE IS SERVED", (0, 0, 255)
+                    )
                 return GameOverEventHandler(self.engine)
             elif self.engine.player.level.requires_level_up:
                 return LevelUpEventHandler(self.engine)
