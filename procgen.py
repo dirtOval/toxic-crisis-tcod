@@ -253,7 +253,7 @@ def toxic_crisis_level(
     player = engine.player
     dungeon = GameMap(engine, map_width, map_height, entities=[player])
 
-    room = RectangularRoom(1, 1, map_width - 2, map_height - 2)
+    room = RectangularRoom(0, 0, map_width - 1, map_height - 1)
     with np.nditer(dungeon.tiles[room.inner], op_flags=["readwrite"]) as zone:
         for tile in zone:
             cointoss = random.randint(0, 2)
@@ -263,6 +263,27 @@ def toxic_crisis_level(
                 tile[...] = tile_types.floor
 
     player.place(*room.center, dungeon)
+    dungeon.tiles[room.center] = tile_types.floor
+
+    cost = np.array(dungeon.tiles["walkable"], dtype=np.int8)
+    graph = tcod.path.SimpleGraph(cost=cost, cardinal=2, diagonal=3)
+    pathfinder = tcod.path.Pathfinder(graph)
+
+    pathfinder.add_root(room.center)
+    # print(f"{len(unreachable)} unreachable tiles removed!")
+    pathfinder.resolve()
+    x, y = np.where(pathfinder.distance == np.iinfo(pathfinder.distance.dtype).max)
+    unreachable = list(zip([int(s) for s in x], [int(t) for t in y]))
+    for tile in unreachable:
+        if dungeon.tiles["walkable"][tile[0], tile[1]]:
+            print(f"{tile} filled!")
+            dungeon.tiles[tile] = tile_types.red_wall
+
+    # print(len(unreachable))
+    # print(unreachable)
+    # unreachable = pathfinder.distance != np.iinfo(pathfinder.distance.dtype).max
+    # dungeon.tiles[unreachable] = tile_types.wall
+
     place_entities(room, dungeon, entity_factories.snake, random.randint(1, 25))
     place_entities(room, dungeon, entity_factories.beef_snake, random.randint(1, 1))
 

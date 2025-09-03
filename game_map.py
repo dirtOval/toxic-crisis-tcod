@@ -22,7 +22,7 @@ class GameMap:
         self.tiles = np.full((width, height), fill_value=tile_types.wall, order="F")
 
         self.visible = np.full((width, height), fill_value=False, order="F")
-        self.explored = np.full((width, height), fill_value=False, order="F")
+        self.explored = np.full((width, height), fill_value=True, order="F")
 
         self.downstairs_location = (0, 0)
 
@@ -161,4 +161,3 @@ class GameWorld:
             # max_items_per_room=self.max_items_per_room,
             engine=self.engine,
         )
-
